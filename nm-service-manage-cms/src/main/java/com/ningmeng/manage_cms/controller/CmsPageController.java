@@ -46,7 +46,7 @@ public class CmsPageController implements CmsPageContorllerApi {
     public CmsPageResult update(@PathVariable("id") String id,@RequestBody CmsPage cmsPage) {
         return pageService.update(id,cmsPage);
     }
-    //删除方法
+    //删除方法2
     @Override
     public ResponseResult delete(String id) {
         return pageService.delete(id);
