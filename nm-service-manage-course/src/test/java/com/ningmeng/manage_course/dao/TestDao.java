@@ -1,6 +1,11 @@
 package com.ningmeng.manage_course.dao;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.ningmeng.framework.domain.course.CourseBase;
+import com.ningmeng.framework.domain.course.ext.CourseInfo;
+import com.ningmeng.framework.domain.course.request.CourseListRequest;
+import com.ningmeng.framework.domain.system.SysDictionary;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sound.midi.Soundbank;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,6 +28,9 @@ public class TestDao {
 
     @Autowired
     CourseMapper courseMapper;
+
+    @Autowired
+    DictionaryRepository dictionaryRepository;
 
     @Test
     public void testCourseBaseRepository(){
@@ -39,4 +48,13 @@ public class TestDao {
         System.out.println(courseBase);
 
     }
+
+    @Test
+    public void testPageHelper(){
+        SysDictionary sysDictionary = dictionaryRepository.findByDType("100");
+        System.out.println(sysDictionary.getDName());
+
+    }
+
+
 }

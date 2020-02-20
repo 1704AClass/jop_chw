@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ningmeng.framework.domain.course.ext.TeachplanMapper">
+<mapper namespace="com.ningmeng.manage_course.dao.TeachplanMapper">
 
     <resultMap id="TeachplanNodes" type="com.ningmeng.manage_course.pojo.TeachplanNode">
         <id property="id" column="one_id"></id>
