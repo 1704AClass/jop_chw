@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.ningmeng.framework.domain.course.CourseBase;
 import com.ningmeng.framework.domain.course.CourseMarket;
+import com.ningmeng.framework.domain.course.CoursePic;
 import com.ningmeng.framework.domain.course.Teachplan;
 import com.ningmeng.framework.domain.course.ext.CategoryNode;
 import com.ningmeng.framework.domain.course.ext.CourseInfo;
@@ -39,6 +40,9 @@ public class CourseService {
 
     @Autowired
     private CourseMarketRepository courseMarketRepository;
+
+    @Autowired
+    private CoursePicRepository coursePicRepository;
 
 
     public TeachplanNode findTeachplanList(String id){
@@ -167,6 +171,42 @@ public class CourseService {
 
         courseMarketRepository.saveAndFlush(courseMarket);
         return new ResponseResult(CommonCode.SUCCESS);
+    }
+    @Transactional
+    public ResponseResult addCoursePic(String courseId ,String pic){
+        //人如果没有穿过来ID跑出异常
+        if (courseId ==null  ){
+            CustomExceptionCast.cast(CommonCode.FAIL);
+        }
+        //先查询有没有这个图片
+        Optional<CoursePic> coursePicOptional = coursePicRepository.findById(courseId);
+        CoursePic coursePic =null;
+        //把查询出来的数据赋值给一个对象
+        if (coursePicOptional.isPresent()){
+            coursePic = coursePicOptional.get();
+        }
+        //如果这个对象是空的话就创建一个新对象
+        if (coursePic == null){
+            coursePic =new CoursePic();
+        }
+        coursePic.setPic(pic);
+        coursePic.setCourseid(courseId);
+        //保存
+        coursePicRepository.save(coursePic);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+   public CoursePic findCoursePic(String coursePicId){
+    return coursePicRepository.findById(coursePicId).get();
+    }
+
+    @Transactional
+    public ResponseResult deleteCoursePic(String courseId) {
+        long esult = coursePicRepository.deleteByCourseid(courseId);
+        if(esult>0){
+            return new ResponseResult(CommonCode.SUCCESS);
+        }
+        return new ResponseResult(CommonCode.FAIL);
     }
 
 }

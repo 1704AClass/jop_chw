@@ -3,6 +3,7 @@ package com.ningmeng.api.couresapi;
 
 import com.ningmeng.framework.domain.course.CourseBase;
 import com.ningmeng.framework.domain.course.CourseMarket;
+import com.ningmeng.framework.domain.course.CoursePic;
 import com.ningmeng.framework.domain.course.Teachplan;
 import com.ningmeng.framework.domain.course.ext.CategoryNode;
 import com.ningmeng.framework.domain.course.ext.CourseInfo;
@@ -41,5 +42,10 @@ public interface CouresControllerApi {
     public CourseMarket getCourseMarketById(String courseId);
 
     public ResponseResult updateCourseMarket(String id,CourseMarket courseMarket);
-
+    @ApiOperation("添加课程图片")
+    public ResponseResult addCoursePic(String courseId,String pic);
+    @ApiOperation("获取课程基础信息")
+    public CoursePic findCoursePic(String courseId);
+    @ApiOperation("删除课程图片")
+    public ResponseResult deleteCoursePic(String courseId);
 }

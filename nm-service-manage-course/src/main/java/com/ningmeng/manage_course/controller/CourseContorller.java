@@ -4,6 +4,7 @@ import com.ningmeng.api.couresapi.CouresControllerApi;
 
 import com.ningmeng.framework.domain.course.CourseBase;
 import com.ningmeng.framework.domain.course.CourseMarket;
+import com.ningmeng.framework.domain.course.CoursePic;
 import com.ningmeng.framework.domain.course.Teachplan;
 import com.ningmeng.framework.domain.course.ext.CategoryNode;
 import com.ningmeng.framework.domain.course.ext.TeachplanNode;
@@ -13,10 +14,7 @@ import com.ningmeng.framework.model.response.QueryResponseResult;
 import com.ningmeng.framework.model.response.ResponseResult;
 import com.ningmeng.manage_course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/course")
@@ -67,6 +65,23 @@ public class CourseContorller implements CouresControllerApi {
 
     @Override
     public ResponseResult updateCourseMarket(String id, CourseMarket courseMarket) {
-        return null;
+
+        return courseService.updateCourseMarket(id,courseMarket);
     }
+
+    @Override
+    public ResponseResult addCoursePic(String courseId,String pic){
+        return courseService.addCoursePic(courseId,pic);
+    }
+    @GetMapping("/coursepic/findCoursePic/{courseId}")
+    @Override
+    public CoursePic findCoursePic(@PathVariable("courseId") String courseId) {
+        return courseService.findCoursePic(courseId);
+    }
+    @Override
+    @DeleteMapping("/coursepic/delete")
+    public ResponseResult deleteCoursePic(@RequestParam("courseId") String courseId) {
+        return courseService.deleteCoursePic(courseId);
+    }
+
 }
