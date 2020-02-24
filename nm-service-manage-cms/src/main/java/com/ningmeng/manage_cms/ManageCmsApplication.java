@@ -11,7 +11,9 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"com.ningmeng.api"})
 @ComponentScan(basePackages = {"com.ningmeng.manage_cms"})
 public class ManageCmsApplication {
-    public static void main(String[] args){
+    public static void main(String[] args)
+    {
         SpringApplication.run(ManageCmsApplication.class,args);
     }
+    //引入
 }
