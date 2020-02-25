@@ -8,6 +8,7 @@ import com.ningmeng.framework.domain.course.CoursePic;
 import com.ningmeng.framework.domain.course.Teachplan;
 import com.ningmeng.framework.domain.course.ext.CategoryNode;
 import com.ningmeng.framework.domain.course.ext.CourseInfo;
+import com.ningmeng.framework.domain.course.ext.CourseView;
 import com.ningmeng.framework.domain.course.ext.TeachplanNode;
 import com.ningmeng.framework.domain.course.request.CourseListRequest;
 import com.ningmeng.framework.domain.system.SysDictionary;
@@ -208,5 +209,32 @@ public class CourseService {
         }
         return new ResponseResult(CommonCode.FAIL);
     }
+
+   public CourseView courseview(String id){
+       CourseView courseView = new CourseView();
+       //查询课程基本信息
+       Optional<CourseBase> optional = courseBaseRepository.findById(id);
+       if(optional.isPresent()){
+           CourseBase courseBase = optional.get();
+           courseView.setCourseBase(courseBase);
+       }
+       //查询课程营销信息
+       Optional<CourseMarket> courseMarketOptional = courseMarketRepository.findById(id);
+       if(courseMarketOptional.isPresent()){
+           CourseMarket courseMarket = courseMarketOptional.get();
+           courseView.setCourseMarket(courseMarket);
+       }
+
+       //查询图片信息
+        Optional<CoursePic> picOptional=coursePicRepository.findById(id);
+       if(picOptional.isPresent()){
+           CoursePic coursePic = picOptional.get();
+           courseView.setCoursePic(picOptional.get());
+       }
+         TeachplanNode teachplanNode = teachplanMapper.findTeachplanList(id);
+         courseView.setTeachplanNode(teachplanNode);
+        return courseView;
+   }
+
 
 }

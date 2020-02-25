@@ -7,6 +7,7 @@ import com.ningmeng.framework.domain.course.CoursePic;
 import com.ningmeng.framework.domain.course.Teachplan;
 import com.ningmeng.framework.domain.course.ext.CategoryNode;
 import com.ningmeng.framework.domain.course.ext.CourseInfo;
+import com.ningmeng.framework.domain.course.ext.CourseView;
 import com.ningmeng.framework.domain.course.ext.TeachplanNode;
 import com.ningmeng.framework.domain.course.request.CourseListRequest;
 import com.ningmeng.framework.domain.system.SysDictionary;
@@ -48,4 +49,6 @@ public interface CouresControllerApi {
     public CoursePic findCoursePic(String courseId);
     @ApiOperation("删除课程图片")
     public ResponseResult deleteCoursePic(String courseId);
+    @ApiOperation("课程视图查询")
+    public CourseView courseview(String id);
 }
