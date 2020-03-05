@@ -42,40 +42,41 @@ import java.util.*;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class TestIndex {
-@Autowired
+
+    @Autowired
     RestHighLevelClient client;
-@Autowired
+    @Autowired
     RestClient restClient;
 
-//创建索引库
-@Test
-public void testCreateIndex() throws IOException {
+    //创建索引库
+    @Test
+    public void testCreateIndex() throws IOException {
         //创建索引请求对象，并设置索引名称
         CreateIndexRequest createIndexRequest = new CreateIndexRequest("nm_course");
         //设置索引参数
         createIndexRequest.settings(Settings.builder().put("number_of_shards", 1)
-        .put("number_of_replicas", 0));
+                .put("number_of_replicas", 0));
         //设置映射
         createIndexRequest.mapping("doc", " {\n" +
-        " \t\"properties\": {\n" +
-        " \"name\": {\n" +
-        " \"type\": \"text\",\n" +
-        " \"analyzer\":\"ik_max_word\",\n" +
-        " \"search_analyzer\":\"ik_smart\"\n" +
-        " },\n" +
-        " \"description\": {\n" +
-        " \"type\": \"text\",\n" +
-        " \"analyzer\":\"ik_max_word\",\n" +
-        " \"search_analyzer\":\"ik_smart\"\n" +
-        " },\n" +
-        " \"studymodel\": {\n" +
-        " \"type\": \"keyword\"\n" +
-        " },\n" +
-        " \"price\": {\n" +
-        " \"type\": \"float\"\n" +
-        " }\n" +
-        " }\n" +
-        "}", XContentType.JSON);
+                " \t\"properties\": {\n" +
+                " \"name\": {\n" +
+                " \"type\": \"text\",\n" +
+                " \"analyzer\":\"ik_max_word\",\n" +
+                " \"search_analyzer\":\"ik_smart\"\n" +
+                " },\n" +
+                " \"description\": {\n" +
+                " \"type\": \"text\",\n" +
+                " \"analyzer\":\"ik_max_word\",\n" +
+                " \"search_analyzer\":\"ik_smart\"\n" +
+                " },\n" +
+                " \"studymodel\": {\n" +
+                " \"type\": \"keyword\"\n" +
+                " },\n" +
+                " \"price\": {\n" +
+                " \"type\": \"float\"\n" +
+                " }\n" +
+                " }\n" +
+                "}", XContentType.JSON);
         //创建索引操作客户端
         IndicesClient indices = client.indices();
         //创建响应对象
@@ -83,11 +84,11 @@ public void testCreateIndex() throws IOException {
         //得到响应结果
         boolean acknowledged = createIndexResponse.isAcknowledged();
         System.out.println(acknowledged + "-----新建索引库");
-        }
+    }
 
-//删除索引库
-@Test
-public void testDeleteIndex() throws IOException {
+    //删除索引库
+    @Test
+    public void testDeleteIndex() throws IOException {
         //删除索引请求对象6.3 添加文档
         DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest("nm_course");
         //删除索引
@@ -95,11 +96,11 @@ public void testDeleteIndex() throws IOException {
         //删除索引响应结果
         boolean acknowledged = deleteIndexResponse.isAcknowledged();
         System.out.println(acknowledged + "----删除索引库");
-        }
+    }
 
-//添加文档
-@Test
-public void testAddDoc() throws IOException {
+    //添加文档
+    @Test
+    public void testAddDoc() throws IOException {
         //准备json数据
         Map<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("name", "spring cloud实战");
@@ -114,24 +115,24 @@ public void testAddDoc() throws IOException {
         indexRequest.source(jsonMap);
         //索引响应对象
         IndexResponse indexResponse = client.index(indexRequest);
-        }
+    }
 
-//更新文档
-@Test
-public void updateDoc() throws IOException {
+    //更新文档
+    @Test
+    public void updateDoc() throws IOException {
         UpdateRequest updateRequest = new UpdateRequest("nm_course", "doc",
-        "AXCGBgCXCiPXg_K3gOJM");
+                "AXCGBgCXCiPXg_K3gOJM");
         Map<String, String> map = new HashMap<>();
         map.put("name", "spring cloud实战2");
         updateRequest.doc(map);
         UpdateResponse update = client.update(updateRequest);
         RestStatus status = update.status();
         System.out.println(status + "更新文档");
-        }
+    }
 
-//根据id删除文档
-@Test
-public void testDelDoc() throws IOException {
+    //根据id删除文档
+    @Test
+    public void testDelDoc() throws IOException {
         //删除文档id
         String id = "AXCGBgCXCiPXg_K3gOJM";
         //删除索引请求对象
@@ -141,11 +142,11 @@ public void testDelDoc() throws IOException {
         //获取响应结果
         DocWriteResponse.Result result = deleteResponse.getResult();
         System.out.println(result + "删除文档里得数据");
-        }
+    }
 
-//搜索type下的全部记录
-@Test
-public void testDSLSearchAll() throws IOException {
+    //搜索type下的全部记录
+    @Test
+    public void testDSLSearchAll() throws IOException {
         //搜索请求对象
         SearchRequest searchRequest = new SearchRequest("nm_course");
         //指定搜索类型
@@ -174,16 +175,16 @@ public void testDSLSearchAll() throws IOException {
         System.out.println("条数：" + totalHits);
         SearchHit[] searchHits = hits.getHits();
         for (SearchHit hit : searchHits) {
-        Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-        String name = (String) sourceAsMap.get("name");
-        String studymodel = (String) sourceAsMap.get("studymodel");
-        System.out.println("name:" + name + "-------studymodel:" + studymodel);
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String name = (String) sourceAsMap.get("name");
+            String studymodel = (String) sourceAsMap.get("studymodel");
+            System.out.println("name:" + name + "-------studymodel:" + studymodel);
         }
-        }
+    }
 
-//match Query
-@Test
-public void getDSLByMatchQuery() throws IOException {
+    //match Query
+    @Test
+    public void getDSLByMatchQuery() throws IOException {
         //搜索请求对象
         SearchRequest searchRequest = new SearchRequest("nm_course");
         //指定搜索类型
@@ -207,16 +208,16 @@ public void getDSLByMatchQuery() throws IOException {
         System.out.println("条数：" + totalHits);
         SearchHit[] searchHits = hits.getHits();
         for (SearchHit hit : searchHits) {
-        Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-        String name = (String) sourceAsMap.get("name");
-        String studymodel = (String) sourceAsMap.get("studymodel");
-        System.out.println("name:" + name + "-------studymodel:" + studymodel);
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String name = (String) sourceAsMap.get("name");
+            String studymodel = (String) sourceAsMap.get("studymodel");
+            System.out.println("name:" + name + "-------studymodel:" + studymodel);
         }
-        }
+    }
 
-//multiMatchQuery
-@Test
-public void getDSLmultiMatchQuery() throws IOException {
+    //multiMatchQuery
+    @Test
+    public void getDSLmultiMatchQuery() throws IOException {
         //搜索请求对象
         SearchRequest searchRequest = new SearchRequest("nm_course");
         //指定搜索类型
@@ -241,16 +242,16 @@ public void getDSLmultiMatchQuery() throws IOException {
         System.out.println("条数：" + totalHits);
         SearchHit[] searchHits = hits.getHits();
         for (SearchHit hit : searchHits) {
-        Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-        String name = (String) sourceAsMap.get("name");
-        String studymodel = (String) sourceAsMap.get("studymodel");
-        System.out.println("name:" + name + "-------studymodel:" + studymodel);
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String name = (String) sourceAsMap.get("name");
+            String studymodel = (String) sourceAsMap.get("studymodel");
+            System.out.println("name:" + name + "-------studymodel:" + studymodel);
         }
-        }
+    }
 
-//BoolQuery，将搜索关键字分词，拿分词去索引库搜索
-@Test
-public void getDSBoolQuery() throws IOException {
+    //BoolQuery，将搜索关键字分词，拿分词去索引库搜索
+    @Test
+    public void getDSBoolQuery() throws IOException {
         //搜索请求对象
         SearchRequest searchRequest = new SearchRequest("nm_course");
         //指定搜索类型
@@ -262,8 +263,8 @@ public void getDSBoolQuery() throws IOException {
         //multiQuery
         String keyword = "spring开发框架";
         MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("spring框架",
-        "name", "description")
-        .minimumShouldMatch("50%");
+                "name", "description")
+                .minimumShouldMatch("50%");
         multiMatchQueryBuilder.field("name", 10);
         //TermQuery
         TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("studymodel", "201001");
@@ -281,14 +282,14 @@ public void getDSBoolQuery() throws IOException {
         SearchHits hits = searchResponse.getHits();
         SearchHit[] searchHits = hits.getHits();
         for (SearchHit hit : searchHits) {
-        Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-        System.out.println(sourceAsMap);
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            System.out.println(sourceAsMap);
         }
-        }
+    }
 
-//布尔查询使用过虑器
-@Test
-public void testFilter() throws IOException {
+    //布尔查询使用过虑器
+    @Test
+    public void testFilter() throws IOException {
         //搜索请求对象
         SearchRequest searchRequest = new SearchRequest("nm_course");
         //指定搜索类型
@@ -303,7 +304,7 @@ public void testFilter() throws IOException {
 
         //匹配关键字
         MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("spring框架",
-        "name", "description");
+                "name", "description");
 
         //设置匹配占比
         multiMatchQueryBuilder.minimumShouldMatch("50%");
@@ -325,20 +326,20 @@ public void testFilter() throws IOException {
         SearchHits hits = searchResponse.getHits();
         SearchHit[] searchHits = hits.getHits();
         for (SearchHit hit : searchHits) {
-        Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-        System.out.println(sourceAsMap);
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            System.out.println(sourceAsMap);
         }
-        }
+    }
 
-//排序
-@Test
-public void testSort() throws IOException {
+    //排序
+    @Test
+    public void testSort() throws IOException {
         SearchRequest searchRequest = new SearchRequest("nm_course");
         searchRequest.types("doc");
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         //source源字段过虑
         searchSourceBuilder.fetchSource(new String[]{"name", "studymodel", "price", "description"},
-        new String[]{});
+                new String[]{});
         searchRequest.source(searchSourceBuilder);
         //布尔查询
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
@@ -352,37 +353,37 @@ public void testSort() throws IOException {
         SearchHits hits = searchResponse.getHits();
         SearchHit[] searchHits = hits.getHits();
         for (SearchHit hit : searchHits) {
-        String index = hit.getIndex();
-        String type = hit.getType();
-        String id = hit.getId();
-        float score = hit.getScore();
-        String sourceAsString = hit.getSourceAsString();
-        Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-        String name = (String) sourceAsMap.get("name");
-        String studymodel = (String) sourceAsMap.get("studymodel");
-        String description = (String) sourceAsMap.get("description");
-        System.out.println(name); System.out.println(studymodel);
-        System.out.println(description);
+            String index = hit.getIndex();
+            String type = hit.getType();
+            String id = hit.getId();
+            float score = hit.getScore();
+            String sourceAsString = hit.getSourceAsString();
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String name = (String) sourceAsMap.get("name");
+            String studymodel = (String) sourceAsMap.get("studymodel");
+            String description = (String) sourceAsMap.get("description");
+            System.out.println(name); System.out.println(studymodel);
+            System.out.println(description);
         }
-        }
+    }
 
-//高亮显示
-@Test
-public void testHighlight() throws IOException {
+    //高亮显示
+    @Test
+    public void testHighlight() throws IOException {
         SearchRequest searchRequest = new SearchRequest("nm_course");
         searchRequest.types("doc");
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         //source源字段过虑
         searchSourceBuilder.fetchSource(new String[]{"name","studymodel","price","description"},
-        new String[]{});
+                new String[]{});
         searchRequest.source(searchSourceBuilder);
         //匹配关键字
-       /* MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("开发",
+        MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("开发",
                 "name", "description");
-        searchSourceBuilder.query(multiMatchQueryBuilder);*/
+        searchSourceBuilder.query(multiMatchQueryBuilder);
         //布尔查询
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        //boolQueryBuilder.must(searchSourceBuilder.query());
+        boolQueryBuilder.must(searchSourceBuilder.query());
         //过虑
         boolQueryBuilder.filter(QueryBuilders.rangeQuery("price").gte(0).lte(100));
         //排序
@@ -400,32 +401,32 @@ public void testHighlight() throws IOException {
         SearchHits hits = searchResponse.getHits();
         SearchHit[] searchHits = hits.getHits();
         for (SearchHit hit : searchHits) {
-        Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-        //名称
-        String name = (String) sourceAsMap.get("name");
-        //取出高亮字段内容
-        Map<String, HighlightField> highlightFields = hit.getHighlightFields();
-        if(highlightFields!=null){
-        HighlightField nameField = highlightFields.get("name");
-        if(nameField!=null){
-        Text[] fragments = nameField.getFragments();
-        StringBuffer stringBuffer = new StringBuffer();
-        for (Text str : fragments) {
-        stringBuffer.append(str.string());
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            //名称
+            String name = (String) sourceAsMap.get("name");
+            //取出高亮字段内容
+            Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+            if(highlightFields!=null){
+                HighlightField nameField = highlightFields.get("name");
+                if(nameField!=null){
+                    Text[] fragments = nameField.getFragments();
+                    StringBuffer stringBuffer = new StringBuffer();
+                    for (Text str : fragments) {
+                        stringBuffer.append(str.string());
+                    }
+                    name = stringBuffer.toString();
+                }
+            }
+            String index = hit.getIndex();
+            String type = hit.getType();
+            String id = hit.getId();
+            float score = hit.getScore();
+            String sourceAsString = hit.getSourceAsString();
+            String studymodel = (String) sourceAsMap.get("studymodel");
+            String description = (String) sourceAsMap.get("description");
+            System.out.println(name);
+            System.out.println(studymodel);
+            System.out.println(description);
         }
-        name = stringBuffer.toString();
-        }
-        }
-        String index = hit.getIndex();
-        String type = hit.getType();
-        String id = hit.getId();
-        float score = hit.getScore();
-        String sourceAsString = hit.getSourceAsString();
-        String studymodel = (String) sourceAsMap.get("studymodel");
-        String description = (String) sourceAsMap.get("description");
-        System.out.println(name);
-        System.out.println(studymodel);
-        System.out.println(description);
-        }
-   }
+    }
 }
