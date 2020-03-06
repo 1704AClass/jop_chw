@@ -215,7 +215,7 @@ public class MediaUploadService {
         //获取块文件，此列表是已经排好序的列表
         File[] chunkFiles = this.getChunkFiles(chunkfileFolder);
         //合并文件
-        File file = this.mergeFile(mergeFile, chunkFiles);
+        File file = this.mergeFile(mergeFile,chunkFiles);
         //校验文件(md5值)    为了保证合并的成功性
         boolean bool = this.checkFileMd5(mergeFile);
         if(!bool){
